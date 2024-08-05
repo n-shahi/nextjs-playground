@@ -1,9 +1,10 @@
 import React from 'react'
+import Button from './Button'
 
 const ProductCard = () => {
   return (
     <div>
-      <button onClick={() => console.log('Hi there!')}>Hi There</button>
+      <Button>Hi There</Button>
     </div>
   )
 }
