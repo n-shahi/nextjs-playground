@@ -1,10 +1,11 @@
 import React from 'react'
 import Button from './Button'
+import styles from './ProductCard.module.css'
 
 const ProductCard = () => {
   return (
-    <div>
-      <Button>Hi There</Button>
+    <div className={styles.card}>
+      <Button>Product Card</Button>
     </div>
   )
 }

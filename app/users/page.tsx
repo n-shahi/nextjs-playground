@@ -13,6 +13,7 @@ const  UsersPage = async () => {
     <div>
       <div>
         <h1>Users Page</h1>
+        <p>Time: {new Date().toLocaleTimeString()}</p>
         {users.map((user) =>(
           <div key={user.id}>
             <Link href={`/users/${user.id}`}>
