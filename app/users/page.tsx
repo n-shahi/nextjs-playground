@@ -1,28 +1,12 @@
-import Link from 'next/link'
 import React from 'react'
+import UsersTable from './UserTable'
 
-interface User {
-  id: number;
-  name: string;
-}
-
-const  UsersPage = async () => {
-  const res = await fetch('https://jsonplaceholder.typicode.com/users')
-  const users: User[] = await res.json()
+const UsersPage = async () => {
   return (
-    <div>
-      <div>
-        <h1>Users Page</h1>
-        <p>Time: {new Date().toLocaleTimeString()}</p>
-        {users.map((user) =>(
-          <div key={user.id}>
-            <Link href={`/users/${user.id}`}>
-              <p>{user.name}</p>
-            </Link>
-          </div>
-        ))}
-      </div>
-    </div>
+    <>
+      <h1 className='text-sm pl-3 text-gray-700'>Users Page</h1>
+      <UsersTable />
+    </>
   )
 }
 

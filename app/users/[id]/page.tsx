@@ -1,13 +1,13 @@
-'use client'
-import { useParams } from 'next/navigation'
-import React from 'react'
 
-const UserDetail = () => {
-  const userId = useParams()
+interface Props {
+  params: {id: number;}
+}
+
+const UserDetail = ({params: {id}}: Props) => {
   return (
     <div>
       <h1>User Detail</h1>
-      <p>User ID: {userId.id}</p>
+      <p>User ID: {id}</p>
     </div>
   )
 }
