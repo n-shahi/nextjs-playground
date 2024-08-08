@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { Suspense } from 'react'
 import UsersTable from './UserTable'
 import Link from 'next/link'
 
@@ -13,7 +13,9 @@ const UsersPage = async ({ searchParams: {sortOrder}}: Props) => {
       <Link href='/users/new'><button className='btn'>New User</button></Link>
       <br />
       <p className='text-sm pl-3 text-gray-600'>Sort by: {sortOrder}</p>
-      <UsersTable sortOrder={sortOrder} />
+      <Suspense fallback={<p>Loading...</p>}>
+        <UsersTable sortOrder={sortOrder} />
+      </Suspense>
     </>
   )
 }
