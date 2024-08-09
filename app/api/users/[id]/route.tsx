@@ -1,15 +1,20 @@
 import { NextRequest, NextResponse } from "next/server";
 import schema from "../schema";
+import prisma from "@/prisma/client";
 
 interface Props {
-    params: { id: number}
+    params: { id: string}
 }
 
 export async function  GET(request: NextRequest, {params} : Props) {
-    if (params.id > 10)
+    const user = await prisma.user.findUnique({
+        where: {
+            id: parseInt(params.id)
+        }
+    });
+    if (!user)
         return NextResponse.json({ error: 'User not found' }, {status: 404})
-
-    return NextResponse.json({ id: params.id, name: 'Nabin Shahi'})
+    return NextResponse.json(user);
 }
 
 export async function PUT(request: NextRequest, {params} : Props) {
@@ -24,7 +29,7 @@ export async function PUT(request: NextRequest, {params} : Props) {
     if (!validation.success)
         return NextResponse.json({ error: validation.error.errors }, {status: 400});
 
-    if (params.id > 10)
+    if (parseInt(params.id) > 10)
         return NextResponse.json({ error: 'User not found' }, {status: 404})
     return NextResponse.json({ id: 1, name: body.name }, {status: 200});
 }
@@ -34,7 +39,7 @@ export async function DELETE(request: NextRequest, {params} : Props) {
     console.log('Received PUT request:', body);
     console.log('Request parameters:', params)
 
-    if (params.id > 10)
+    if (parseInt(params.id) > 10)
         return NextResponse.json({ error: 'User not found' }, {status: 404})
 
     return NextResponse.json({ id: 1, name: body.name }, {status: 200});
