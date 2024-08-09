@@ -30,3 +30,18 @@ export async function PUT(request: NextRequest, {params} : Props) {
         return NextResponse.json({ error: 'User not found' }, {status: 404})
     return NextResponse.json({ id: 1, name: body.name }, {status: 200});
 }
+
+export async function DELETE(request: NextRequest, {params} : Props) {
+    // Fetch the user with the given id
+    // If user doesn't exist, return 404
+    // Delete the user
+    // Return 200 with deleted user or just empty object
+    const body = await request.json();
+    console.log('Received PUT request:', body);
+    console.log('Request parameters:', params)
+
+    if (params.id > 10)
+        return NextResponse.json({ error: 'User not found' }, {status: 404})
+
+    return NextResponse.json({ id: 1, name: body.name }, {status: 200});
+}
