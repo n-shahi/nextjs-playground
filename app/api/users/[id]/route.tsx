@@ -1,11 +1,11 @@
 import { NextRequest, NextResponse } from "next/server";
+import schema from "../schema";
 
 interface Props {
     params: { id: number}
 }
 
 export async function  GET(request: NextRequest, {params} : Props) {
-    // fetch data from db
     if (params.id > 10)
         return NextResponse.json({ error: 'User not found' }, {status: 404})
 
@@ -13,18 +13,16 @@ export async function  GET(request: NextRequest, {params} : Props) {
 }
 
 export async function PUT(request: NextRequest, {params} : Props) {
-    // validate the request parameters
-    // if invalid, return 400
-    // Fetch the user with the given id
-    // If user doesn't exist, return 404
-    // Update the user
-    // Return 200 with updated user data
     const body = await request.json();
     console.log('Received PUT request:', body);
     console.log('Request parameters:', params)
 
-    if (!body.name)
-        return NextResponse.json({ error: 'Name field is required.' }, {status: 400});
+    // if (!body.name)
+    //     return NextResponse.json({ error: 'Name field is required.' }, {status: 400});
+
+    const validation = schema.safeParse(body);
+    if (!validation.success)
+        return NextResponse.json({ error: validation.error.errors }, {status: 400});
 
     if (params.id > 10)
         return NextResponse.json({ error: 'User not found' }, {status: 404})
@@ -32,10 +30,6 @@ export async function PUT(request: NextRequest, {params} : Props) {
 }
 
 export async function DELETE(request: NextRequest, {params} : Props) {
-    // Fetch the user with the given id
-    // If user doesn't exist, return 404
-    // Delete the user
-    // Return 200 with deleted user or just empty object
     const body = await request.json();
     console.log('Received PUT request:', body);
     console.log('Request parameters:', params)
