@@ -21,3 +21,10 @@ model User {
   isActive   Boolean  @default(false)
   registerAt DateTime @default(now())
 }
+
+
+model Product {
+  id         Int      @id @default(autoincrement())
+  name       String   @unique
+  price      Float
+}
