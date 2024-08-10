@@ -16,7 +16,7 @@ const Navbar = () => {
           { status ==='loading' && <li><div>Loading...</div></li>}
           { status === 'authenticated' && 
           <li>
-            {session.user!.name}
+            {session.user?.name}
             <Link href="/api/auth/signout" className='m-5'>Sign Out</Link>
           </li>}
           { status === 'unauthenticated' && <li><Link href="/api/auth/signin" className='m-5'>Sign In</Link></li>}
