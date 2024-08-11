@@ -1292,7 +1292,10 @@ const WelcomeTemplate = ({ name }: {name: string}) => {
     </Html>
   )
 }
-
 export default WelcomeTemplate
-
 ```
+
+### Previewing Template
+- add .react-email/ dir to .gitignore
+- run: npm run preview email
+
