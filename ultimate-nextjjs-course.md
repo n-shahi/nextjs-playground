@@ -1363,3 +1363,51 @@ export async function POST() {
   return NextResponse.json({'status': true}, { status: 200})
 }
 ```
+
+## Optimization 
+- You will learn
+  - Optimizing images
+  - Using third party JS libraries
+  - Using custom fonts
+  - Search Engine Optimization
+  - Lazy loading
+
+### Optimizing Images
+- We can optimize images in NextJS using Image components
+- which is built on the top of html image tag, but undert the hood it automatically compresses and resizes according to devices.
+- it serves images as webp(modern format which supports in all browsers and far smaller)
+
+- ref: https://nextjs.org/docs/pages/building-your-application/optimizing/images
+- Static: imges which ships to the application, images in public folder
+- Remote: 
+  - add remote to nextConfig for security reasons cuz
+  - for remote images need to specify height and width of the images
+  - specify height and width if need to display fixed size of the image
+  - if responsive: use fill instead of height and width
+  - set style={{ objectFit: 'cover or contain' }}
+  - or set className='object-cover'
+  - we often need to set sizes with fill: 
+    - for 100% width of the viewport: sizes="100vw"
+    - for showing multiple columns: sizes="(max-width: 480px) 100vw, (max-width: 768px) 33">
+    - the above sizes is only for NextJS to properly optimize images
+  - set quality={100} for the highest quality for images like backgrounds, but 75 works for most cases
+  - set priority if you want to get in first go(ignoring lazy loading)
+  - when we use fill props, we need to set position clasName="relative or absolute or fixed" and height clasName="h-screen"
+```tsx
+import Image from "next/image"
+import coffee from "@/public/images/coffee.jpg"
+
+export default async function Home() {
+  return (
+    <main>
+      <Image src={cofee} alt="Cofee" />
+      <Image 
+        src="https://bit.ly/react-cover" 
+        alt="Cofee"
+        height={170}
+        width={300}
+      />
+    </main>
+  )
+}
+```
