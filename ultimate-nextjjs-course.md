@@ -1344,4 +1344,22 @@ export default WelcomeTemplate
 
 ### Sending Emails
 - ref: https://react.email/docs/integrations/resend
-- 
+- register and create API token
+- register your domain to make sure your sending email is authorized
+```tsx
+import { Resend } from 'resend';
+import WelcomeTemplate from "@/emails/WelcomeTemplate";
+import { NextResponse } from 'next/server';
+
+const resend = new Resend('re_123456789');
+
+export async function POST() {
+  await resend.emails.send({
+    from: 'you@example.com',
+    to: 'user@gmail.com',
+    subject: 'hello world',
+    react: <WelcomeTemplate name="Nabin Shahi" />,
+  })
+  return NextResponse.json({'status': true}, { status: 200})
+}
+```
