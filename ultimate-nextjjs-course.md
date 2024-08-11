@@ -1261,4 +1261,38 @@ Here are a few exercises and challenges for you to tackle. I decided not to show
 
 ## Sending Emails:
 ### Introduction
-- 
+- learn how to send email in this section
+
+### Setting Up React Email 
+- ref: https://react.email/
+- it gives a bunch of components for creating html emails and tool to preview our emails and function to send email
+- Manual Setup:
+  - npm i react-email @react-email/component
+  - update package.json/scripts:  "preview email": "email dev -p 3030"
+  - create emails folder in root of app
+
+  - create templates: WelcomeTemplate.tsx
+```tsx
+import React from 'react'
+import { Html, Body, Text, Container, Link, Preview } from '@react-email/components'
+
+const WelcomeTemplate = ({ name }: {name: string}) => {
+  return (
+    <Html>
+        <Preview>Welcome to NextJS</Preview>
+        <Body>
+            <Container>
+                <Text>Hi {name}.</Text>
+                <Text>
+                    This is a simple example of a NextJS email template.
+                </Text>
+                <Link href="https://nextjs.org/">Learn More</Link>
+            </Container>
+        </Body>
+    </Html>
+  )
+}
+
+export default WelcomeTemplate
+
+```
