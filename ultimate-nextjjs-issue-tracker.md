@@ -102,3 +102,8 @@ export default NavBar
 - install: npm i prisma
 - npx prisma init
 - update privider, url
+
+## Creating the Issue Model
+- create issue model and migrate
+
+
