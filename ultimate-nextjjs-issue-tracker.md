@@ -102,8 +102,11 @@ export default NavBar
 - install: npm i prisma
 - npx prisma init
 - update privider, url
-
-## Creating the Issue Model
 - create issue model and migrate
+- create client 
+
+### Building an API
+- issue zod for data validation and create api/issues/route.ts
+
 
 
