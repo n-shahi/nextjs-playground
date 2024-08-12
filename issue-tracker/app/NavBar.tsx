@@ -13,7 +13,7 @@ const NavBar = () => {
     { name: 'Dashboard', href: '/dashboard' }
   ]
   return (
-    <nav className='flex space-x-6 border-b p-5 mb-5 h-14 items-center'>
+    <nav className='flex space-x-6 border-b mb-5 h-14 items-center'>
       <Link href='/'><FaBug /></Link>
       <ul><li className='flex space-x-6'>
         {navList.map(item =>

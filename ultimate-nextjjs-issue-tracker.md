@@ -108,5 +108,7 @@ export default NavBar
 ### Building an API
 - issue zod for data validation and create api/issues/route.ts
 
-
+### Setting UP Radix UI
+- install: npm install @radix-ui/themes
+- ref: https://www.radix-ui.com/themes/docs/overview/getting-started
 
