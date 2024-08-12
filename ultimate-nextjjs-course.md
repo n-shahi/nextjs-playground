@@ -1484,3 +1484,50 @@ export default function RootLayout({
         poppins: 'var(--font-poppins)'
       },
   ```
+
+### Search Engine Optimization
+- to make every page search engine friendly, every page should have metadata
+```tsx
+export const metadata: Metadata = {
+  title: 'Home page for Evo',
+  description: 'this is description'
+  openGraph: {
+    title: '...',
+    description: '...',
+    ...
+  }
+```
+- overwrite in other page by defining metadata
+
+### Lazy loading
+- loading client components, third party libraries in the future(based on user interaction), to reduce initial payload
+- loading client components: load component dynamically
+```tsx
+'use client'
+import React from 'react'
+import dynamic from 'next/dynamic'
+const HeavyComponent = dynamic(
+  () => import('../components/HeavyComponent'),
+  {
+    ssr: false,
+    loading: () => <p>Loading...</p>;
+  }
+)
+const AdminPage = () => {
+  const [isVisible, setVisible] = React.useState(false)
+  return (
+    <div>
+      <p>Admin Home Page</p>
+      <button className='btn btn-outline' onClick={() => setVisible(!isVisible)}>Show</button>
+      { isVisible && <HeavyComponent />}
+    </div>
+  )
+}
+export default AdminPage
+```
+- make sure lazy loading for heavy components only not light one.
+
+- loading third party libraries
+```tsx
+
+```
