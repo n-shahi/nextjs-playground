@@ -1555,4 +1555,13 @@ export default AdminPage
 ## Deployment
 ### Preparing for the deployment
 - remove all erros and build: npm run build
+- create repo and push 
 
+### Deploying to Vercel
+- Platforms
+  - Vercel
+  - AWS
+  - Google Cloud Platform
+  - Heroku
+
+- Goto https://vercel.com/ and register and deploy
