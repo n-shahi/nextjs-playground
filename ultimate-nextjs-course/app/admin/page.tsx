@@ -1,21 +1,21 @@
 'use client'
 import React from 'react'
-import dynamic from 'next/dynamic'
-const HeavyComponent = dynamic(
-  () => import('../components/HeavyComponent'),
-  {
-    ssr: false,
-    loading: () => <p>Loading...</p>
-  }
-)
+import _ from 'lodash';
 
 const AdminPage = () => {
-  const [isVisible, setVisible] = React.useState(false)
   return (
     <div>
       <p>Admin Home Page</p>
-      <button className='btn btn-outline' onClick={() => setVisible(!isVisible)}>Show</button>
-      { isVisible && <HeavyComponent />}
+      <button className='btn btn-outline' onClick={ async() => {
+        const _ = (await import('lodash')).default
+        const users = [
+          { id: 1, name: 'John Doe' },
+          { id: 3, name: 'Mike Doe' },
+          { id: 2, name: 'Jane Doe' },
+        ]
+        const sortedUsers = _.orderBy(users, ['name'])
+        console.log(sortedUsers)
+      }}>Show</button>
     </div>
   )
 }
