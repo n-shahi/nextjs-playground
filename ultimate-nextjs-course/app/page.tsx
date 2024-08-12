@@ -11,19 +11,6 @@ export default async function Home() {
       {/* <h1>Darsan Dad!</h1>
       { session &&  <h2>Hello {session.user!.name}</h2>}
       <ProductCard /> */}
-      {/* <Image src={hiking} alt='Hiking'/> */}
-      <Image 
-        src="https://bit.ly/react-cover" 
-        alt="Coffee"
-        // height={300}
-        // width={300}
-        // style={{ objectFit: 'cover' }}
-        className='object-cover'
-        sizes="(max-width: 480px) 100vw, (max-width: 768px) 33"
-        fill
-        priority
-        quality={10}
-      />
     </main>
   )
 }

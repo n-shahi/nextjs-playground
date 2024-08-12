@@ -1411,3 +1411,14 @@ export default async function Home() {
   )
 }
 ```
+
+### Using Third Party Scripts
+- to integrating our app with third party libraries need to add their scripts one or more page
+- add to page if needed in only one page, add to layout if needed for group of pages
+- if requred for all the pages add in main layout.
+- for better separation of concerns separate to separate component like XyxScript.tsx and import wherever reqquired.
+- add strategy if required in Script: 
+  - beforeInteractive: nextjs loads scripts before injecting any client side code: for critical things like chat bot detector
+  - afterInteractive(default): nextjs loads scripts after injecting any client side code: for analytics, etc
+  - lazyOnload: loads after all the resources are loaded: for chat bots, social plugins etx
+
