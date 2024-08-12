@@ -1,12 +1,22 @@
 import './globals.css'
 import type { Metadata } from 'next'
-import { Inter } from 'next/font/google'
+import { Inter, Roboto } from 'next/font/google'
+import localFont from 'next/font/local'
 import Navbar from './Navbar'
 import AuthProvider from './auth/Provider'
 import GoogleAnalyticsScript from './GoogleAnalyticsScript'
 
+// const font = Inter({ subsets: ['latin'] })
 
-const inter = Inter({ subsets: ['latin'] })
+// const font2 = Roboto({ 
+//   subsets: ['latin'],
+//   weight: ["400", "500"]
+// })
+
+const font = localFont({ 
+  src: '../public/fonts/poppins-regular-webfont.woff2',
+  variable: '--font-poppins'
+})
 
 export const metadata: Metadata = {
   title: 'Home',
@@ -21,7 +31,8 @@ export default function RootLayout({
   return (
     <html lang="en" data-theme='winter'>
       <GoogleAnalyticsScript />
-      <body className={inter.className}>
+      <body className={font.className}>
+      {/* <body className={font.variable}> */}
         <AuthProvider>
           <Navbar />
           {children}
