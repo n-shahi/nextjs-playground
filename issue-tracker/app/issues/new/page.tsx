@@ -16,5 +16,4 @@ const NewIssuePage = () => {
     </div>
   )
 }
-
 export default NewIssuePage
