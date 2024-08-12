@@ -9,8 +9,8 @@ import classnames from 'classnames';
 const NavBar = () => {
   const currentPath = usePathname()
   const navList = [
-    { name: 'Issue', href: '/issue' },
-    { name: 'Dashboard', href: '/dashboard' }
+    { name: 'Issues', href: '/issues' },
+    { name: 'Dashboard', href: '/dashboard' },
   ]
   return (
     <nav className='flex space-x-6 border-b mb-5 h-14 items-center'>

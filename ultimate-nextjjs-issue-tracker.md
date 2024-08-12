@@ -111,4 +111,8 @@ export default NavBar
 ### Setting UP Radix UI
 - install: npm install @radix-ui/themes
 - ref: https://www.radix-ui.com/themes/docs/overview/getting-started
+- use ThemePanel and get required theme
+
+- for font needs to do bit of configuration in radix-ui
+- ref: https://www.radix-ui.com/themes/docs/theme/typography
 
