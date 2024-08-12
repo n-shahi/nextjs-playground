@@ -120,3 +120,10 @@ export default NavBar
 - npm i react-simplemde-editor
 - replace description input with md editor
 - ref: https://www.npmjs.com/package/react-simplemde-editor
+
+### Handling Form Submission
+- npm i react-hook-form
+- ref: https://www.npmjs.com/package/react-hook-form
+- npm i axios for handling http requests
+- ref: https://www.npmjs.com/package/axios
+
