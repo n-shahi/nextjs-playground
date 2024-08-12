@@ -95,3 +95,10 @@ const NavBar = () => {
 }
 export default NavBar
 ```
+
+## Creating Issues
+### Setting up MySQL: goto part 1
+### Settin up Prisma
+- install: npm i prisma
+- npx prisma init
+- update privider, url
