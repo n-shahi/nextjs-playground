@@ -1549,7 +1549,10 @@ const AdminPage = () => {
     </div>
   )
 }
-
 export default AdminPage
-
 ```
+
+## Deployment
+### Preparing for the deployment
+- remove all erros and build: npm run build
+
