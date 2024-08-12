@@ -116,3 +116,7 @@ export default NavBar
 - for font needs to do bit of configuration in radix-ui
 - ref: https://www.radix-ui.com/themes/docs/theme/typography
 
+### Adding a Markdown Editor
+- npm i react-simplemde-editor
+- replace description input with md editor
+- ref: https://www.npmjs.com/package/react-simplemde-editor
