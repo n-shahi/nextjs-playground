@@ -244,3 +244,35 @@ const IssueForm = () => {
 }
 export default IssueForm
 ```
+
+### Extracting the ErrorMessage
+- make ErrorMessage component and use it 
+```tsx
+import { Callout, Text } from '@radix-ui/themes';
+import React, { PropsWithChildren } from 'react'
+
+const ErrorMessage = ({ children }: PropsWithChildren) => {
+  if (!children) return null;
+  return (
+    <Text as="p" className='text-red-500'>
+      {children}
+    </Text>
+    // <Callout.Root>
+    //   <Callout.Text color='red'>
+    //     {children}
+    //   </Callout.Text>
+    // </Callout.Root>
+  )
+}
+export default ErrorMessage
+```
+
+### Adding a Spinner
+- Add a Spinner in the button while submitting a form
+
+```tsx
+// get isSubmitting from formState
+// create a Spinner component
+formState: { errors, isSubmitting }
+<Button disabled={isSubmitting}>Submit New Issue {isSubmitting && <Spinner />}</Button>
+```

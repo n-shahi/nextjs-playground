@@ -8,14 +8,15 @@ import { useRouter } from 'next/navigation';
 import axios from 'axios';
 import { useState } from 'react';
 import ErrorMessage from '@/app/components/ErrorMessage';
-import { zodResolver }  from '@hookform/resolvers/zod'
+import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod';
 import { createIssueSchema } from '@/app/validation_schema';
+import Spinner from '@/app/components/Spinner';
 
 type IssueForm = z.infer<typeof createIssueSchema>;
 
 const IssueForm = () => {
-  const { register, handleSubmit, control, formState: {errors}} = useForm<IssueForm>({
+  const { register, handleSubmit, control, formState: { errors, isSubmitting } } = useForm<IssueForm>({
     resolver: zodResolver(createIssueSchema)
   });
   const router = useRouter()
@@ -41,7 +42,7 @@ const IssueForm = () => {
           render={({ field }) => <SimpleMDE placeholder='Description' {...field} />}
         />
         <ErrorMessage>{errors.description?.message}</ErrorMessage>
-        <Button className=''>Submit New Issue</Button>
+        <Button disabled={isSubmitting}>Submit New Issue {isSubmitting && <Spinner />}</Button>
       </form>
     </div>
   )
