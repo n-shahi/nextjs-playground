@@ -20,19 +20,20 @@ const IssueForm = () => {
     resolver: zodResolver(createIssueSchema)
   });
   const router = useRouter()
-  console.log(errors)
+  const onSubmit = handleSubmit(async (data) => {
+    try {
+      await axios.post('/api/issues', data);
+      router.push('/issues')
+    } catch (error) {
+      console.error(error)
+    }
+  })
+
   return (
     <div className='max-w-3xl space-y-3'>
       <form
         className='max-w-3xl space-y-3'
-        onSubmit={handleSubmit(async (data) => {
-          try {
-            await axios.post('/api/issues', data);
-            router.push('/issues')
-          } catch (error) {
-            console.error(error)
-          }
-        })}
+        onSubmit={onSubmit}
       >
         <TextField.Root placeholder="Title" {...register('title')} />
         <ErrorMessage>{errors.title?.message}</ErrorMessage>

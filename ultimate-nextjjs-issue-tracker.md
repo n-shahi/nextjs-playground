@@ -276,3 +276,12 @@ export default ErrorMessage
 formState: { errors, isSubmitting }
 <Button disabled={isSubmitting}>Submit New Issue {isSubmitting && <Spinner />}</Button>
 ```
+
+### Discussions- Code organization
+- better to have inline functions if 1 or 2 lines else make a separate function
+
+- Separateion of concerns: Separate a program into distinct modules each having a separete concern. 
+ 
+- Software engineering is not a black and white.
+- Don't apply other people's solutions as silver bullets. 
+- Avoid unnecessary abstraction. Apply if really necessary. 
