@@ -121,9 +121,126 @@ export default NavBar
 - replace description input with md editor
 - ref: https://www.npmjs.com/package/react-simplemde-editor
 
-### Handling Form Submission
+### Handling Form Submission/Handling errors
 - npm i react-hook-form
 - ref: https://www.npmjs.com/package/react-hook-form
 - npm i axios for handling http requests
 - ref: https://www.npmjs.com/package/axios
+```tsx
+// create form in issues/_components/IssueForm.tsx
+'use client'
+import { useForm, Controller } from 'react-hook-form';
+import { Button, TextField } from '@radix-ui/themes'
+import SimpleMDE from "react-simplemde-editor";
+import "easymde/dist/easymde.min.css";
 
+import { useRouter } from 'next/navigation';
+import axios from 'axios';
+import { useState } from 'react';
+import ErrorMessage from '@/app/components/ErrorMessage';
+
+interface IssueForm {
+  title: string;
+  description: string;
+}
+
+const IssueForm = () => {
+  const { register, handleSubmit, control} = useForm<IssueForm>();
+  const [error, setError] = useState('');
+  const router = useRouter()
+  return (
+    <div className='max-w-3xl space-y-3'>
+      {error && <ErrorMessage>{error}</ErrorMessage>}
+      <form
+        className='max-w-3xl space-y-3'
+        onSubmit={handleSubmit(async (data) => {
+          try {
+            setError('')
+            await axios.post('/api/issues', data);
+            router.push('/issues')
+          } catch (error) {
+            setError('Unexpected error occurred.')
+            console.error(error)
+          }
+        })}
+      >
+        <TextField.Root placeholder="Title" {...register('title')} />
+        <Controller
+          name='description'
+          control={control}
+          render={({ field }) => <SimpleMDE placeholder='Description' {...field} />}
+        />
+        <Button className=''>Submit New Issue</Button>
+      </form>
+    </div>
+  )
+}
+export default IssueForm
+
+
+// use it in issues/new/page.tsx
+import dynamic from "next/dynamic"
+
+const DynamicIssueForm = dynamic(
+  () => import('../_components/IssueForm'), 
+  { ssr: false, loading: () => <p>Loading...</p> }
+)
+
+const NewIssuePage = () => {
+  return (
+    <div>
+      <h1>Issue Form</h1>
+      <DynamicIssueForm />
+    </div>
+  )
+}
+export default NewIssuePage
+```
+
+### Implementing Client-side Validation
+- move schema to generic place 
+- npm i @hookform/resolvers@3.3.1 :> allow react hook forms to integrate with various data validation library like zod
+- import zodResolver for validation and z.infer to extract types from schema
+```tsx
+...
+import ErrorMessage from '@/app/components/ErrorMessage';
+import { zodResolver }  from '@hookform/resolvers/zod'
+import { z } from 'zod';
+import { createIssueSchema } from '@/app/validation_schema';
+
+type IssueForm = z.infer<typeof createIssueSchema>;
+
+const IssueForm = () => {
+  const { register, handleSubmit, control, formState: {errors}} = useForm<IssueForm>({
+    resolver: zodResolver(createIssueSchema)
+  });
+  const router = useRouter()
+  console.log(errors)
+  return (
+    <div className='max-w-3xl space-y-3'>
+      <form
+        className='max-w-3xl space-y-3'
+        onSubmit={handleSubmit(async (data) => {
+          try {
+            await axios.post('/api/issues', data);
+            router.push('/issues')
+          } catch (error) {
+            console.error(error)
+          }
+        })}
+      >
+        <TextField.Root placeholder="Title" {...register('title')} />
+        <ErrorMessage>{errors.title?.message}</ErrorMessage>
+        <Controller
+          name='description'
+          control={control}
+          render={({ field }) => <SimpleMDE placeholder='Description' {...field} />}
+        />
+        <ErrorMessage>{errors.description?.message}</ErrorMessage>
+        <Button className=''>Submit New Issue</Button>
+      </form>
+    </div>
+  )
+}
+export default IssueForm
+```

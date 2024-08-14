@@ -8,38 +8,39 @@ import { useRouter } from 'next/navigation';
 import axios from 'axios';
 import { useState } from 'react';
 import ErrorMessage from '@/app/components/ErrorMessage';
+import { zodResolver }  from '@hookform/resolvers/zod'
+import { z } from 'zod';
+import { createIssueSchema } from '@/app/validation_schema';
 
-interface IssueForm {
-  title: string;
-  description: string;
-}
+type IssueForm = z.infer<typeof createIssueSchema>;
 
 const IssueForm = () => {
-  const { register, handleSubmit, control} = useForm<IssueForm>();
-  const [error, setError] = useState('');
+  const { register, handleSubmit, control, formState: {errors}} = useForm<IssueForm>({
+    resolver: zodResolver(createIssueSchema)
+  });
   const router = useRouter()
+  console.log(errors)
   return (
     <div className='max-w-3xl space-y-3'>
-      {error && <ErrorMessage>{error}</ErrorMessage>}
       <form
         className='max-w-3xl space-y-3'
         onSubmit={handleSubmit(async (data) => {
           try {
-            setError('')
             await axios.post('/api/issues', data);
             router.push('/issues')
           } catch (error) {
-            setError('Unexpected error occurred.')
             console.error(error)
           }
         })}
       >
         <TextField.Root placeholder="Title" {...register('title')} />
+        <ErrorMessage>{errors.title?.message}</ErrorMessage>
         <Controller
           name='description'
           control={control}
           render={({ field }) => <SimpleMDE placeholder='Description' {...field} />}
         />
+        <ErrorMessage>{errors.description?.message}</ErrorMessage>
         <Button className=''>Submit New Issue</Button>
       </form>
     </div>
