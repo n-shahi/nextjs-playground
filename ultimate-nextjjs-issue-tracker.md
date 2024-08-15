@@ -280,8 +280,59 @@ formState: { errors, isSubmitting }
 ### Discussions- Code organization
 - better to have inline functions if 1 or 2 lines else make a separate function
 
-- Separateion of concerns: Separate a program into distinct modules each having a separete concern. 
+- Separateion of concerns: Separ∑ate a program into distinct modules each having a separete concern. 
  
 - Software engineering is not a black and white.
 - Don't apply other people's solutions as silver bullets. 
 - Avoid unnecessary abstraction. Apply if really necessary. 
+
+
+## Viewing Issues
+### Showing the Issues
+- use radix table to show fetched issues from database 
+```tsx
+import prisma from '@/prisma/client'
+import { Button, Table } from '@radix-ui/themes'
+import Link from 'next/link'
+import React from 'react'
+
+const IssuePage = async () => {
+  const issues = await prisma.issue.findMany()
+  return (
+    <div>
+      <div className='mb-5'>
+        <Button><Link href='/issues/new'>New Issue</Link></Button>
+      </div>
+      <Table.Root variant='surface'>
+        <Table.Header>
+          <Table.Row>
+            <Table.ColumnHeaderCell>Issue</Table.ColumnHeaderCell>
+            <Table.ColumnHeaderCell className='hidden md:table-cell'>Status</Table.ColumnHeaderCell>
+            <Table.ColumnHeaderCell className='hidden md:table-cell'>CreateAt</Table.ColumnHeaderCell>
+          </Table.Row>
+
+        </Table.Header>
+        <Table.Body>
+          {issues.map((issue) => (
+            <Table.Row key={issue.id}>
+              <Table.Cell>
+                <Link href={`/issues/${issue.id}`}>
+                  {issue.title}
+                  <div className='block md:hidden'>
+                    {issue.status}
+                  </div>
+                </Link>
+              </Table.Cell>
+              <Table.Cell className='hidden md:table-cell'>{issue.status}</Table.Cell>
+              <Table.Cell className='hidden md:table-cell'>{new Date(issue.createdAt).toLocaleString()}</Table.Cell>
+            </Table.Row>
+          ))}
+        </Table.Body>
+      </Table.Root>
+    </div>
+  )
+}
+export default IssuePage
+````
+
+### 
