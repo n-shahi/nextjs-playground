@@ -9,7 +9,7 @@ import classnames from 'classnames';
 const NavBar = () => {
   const currentPath = usePathname()
   const navList = [
-    { name: 'Issues', href: '/issues' },
+    { name: 'Issues', href: '/issues/list' },
     { name: 'Dashboard', href: '/dashboard' },
   ]
   return (
