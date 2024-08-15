@@ -464,3 +464,30 @@ module.exports = {
 }
 ```
 - and, add prose class to your component
+
+### Building a Styled Link Component
+- use Link from radix-ui
+- but you will loose client side navigation. it does full page reload
+- so create custom components Link in components
+```tsx
+import React, { ReactNode } from 'react'
+import { Link as RadixLink } from '@radix-ui/themes'
+import NextLink from 'next/link'
+
+interface Props {
+    href: string;
+    children: ReactNode;
+}
+
+const Link = ({ href, children }: Props) => {
+  return (
+    <NextLink href={href} legacyBehavior>
+        <RadixLink>{children}</RadixLink>
+    </NextLink>
+  )
+}
+export default Link
+```
+- use above component for Next Link functionality with RadixUI Link looks
+
+### 
