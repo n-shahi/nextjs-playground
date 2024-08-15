@@ -9,8 +9,9 @@ import React from 'react'
 const DeleteIssueButton = ({ issueId }: { issueId: number }) => {
   const router = useRouter()
   const deleteIssue = async () => {
-    await axios.delete(`/issues/${issueId}`)
+    await axios.delete(`/api/issues/${issueId}`)
     router.push('/issues/')
+    router.refresh()
   }
   return (
     <>
