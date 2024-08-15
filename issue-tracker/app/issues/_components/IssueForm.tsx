@@ -18,14 +18,18 @@ const SimpleMDE = dynamic(
 )
 type IssueForm = z.infer<typeof issueSchema>;
 
-const IssueForm = async ({issue }: {issue?: Issue}) => {
+const IssueForm = async ({ issue }: { issue?: Issue }) => {
   const { register, handleSubmit, control, formState: { errors, isSubmitting } } = useForm<IssueForm>({
     resolver: zodResolver(issueSchema)
   });
   const router = useRouter()
   const onSubmit = handleSubmit(async (data) => {
     try {
-      await axios.post('/api/issues', data);
+      if (issue) {
+        await axios.patch(`/api/issues/${issue.id}`, data);
+      } else {
+        await axios.post('/api/issues', data);
+      }
       router.push('/issues')
     } catch (error) {
       console.error(error)
@@ -38,7 +42,7 @@ const IssueForm = async ({issue }: {issue?: Issue}) => {
           className='max-w-3xl space-y-3'
           onSubmit={onSubmit}
         >
-          <TextField.Root placeholder="Title" {...register('title')} defaultValue={issue?.title}/>
+          <TextField.Root placeholder="Title" {...register('title')} defaultValue={issue?.title} />
           <ErrorMessage>{errors.title?.message}</ErrorMessage>
           <Controller
             name='description'
@@ -47,7 +51,9 @@ const IssueForm = async ({issue }: {issue?: Issue}) => {
             render={({ field }) => <SimpleMDE placeholder='Description' {...field} />}
           />
           <ErrorMessage>{errors.description?.message}</ErrorMessage>
-          <Button disabled={isSubmitting}>Submit New Issue {isSubmitting && <Spinner />}</Button>
+          <Button disabled={isSubmitting}>
+            {issue ? 'Update Issue' : 'Submit New Issue'} {isSubmitting && <Spinner />}
+          </Button>
         </form>
       </div>
     </div>

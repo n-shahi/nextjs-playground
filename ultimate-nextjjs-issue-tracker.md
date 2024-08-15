@@ -569,3 +569,18 @@ export async function PATCH(request: NextRequest, {params: {id}}: { params: {id:
 
 }
 ```
+
+### Update Issue
+- do patch is issue is present else post
+```tsx
+try {
+      if (issue) {
+        await axios.patch(`/api/issues/${issue.id}`, data);
+      } else {
+        await axios.post('/api/issues', data);
+      }
+      router.push('/issues')
+    } catch (error) {
+      console.error(error)
+    }
+```
