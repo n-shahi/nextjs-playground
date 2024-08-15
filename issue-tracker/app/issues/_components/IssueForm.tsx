@@ -18,7 +18,7 @@ const SimpleMDE = dynamic(
 )
 type IssueForm = z.infer<typeof issueSchema>;
 
-const IssueForm = async ({ issue }: { issue?: Issue }) => {
+const IssueForm = ({ issue }: { issue?: Issue }) => {
   const { register, handleSubmit, control, formState: { errors, isSubmitting } } = useForm<IssueForm>({
     resolver: zodResolver(issueSchema)
   });
@@ -31,6 +31,7 @@ const IssueForm = async ({ issue }: { issue?: Issue }) => {
         await axios.post('/api/issues', data);
       }
       router.push('/issues')
+      router.refresh();
     } catch (error) {
       console.error(error)
     }

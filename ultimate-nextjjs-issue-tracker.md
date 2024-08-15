@@ -584,3 +584,30 @@ try {
       console.error(error)
     }
 ```
+
+### Understanding Caching in NextJS
+- In nextJs we have three cache layers
+    - Data Cache
+      - When we fetch data using fetch()
+        - so whenever we fetch data using fetch() api, next time it will fetch from cache. 
+        - Stored in the file system
+        - Permanent until we redeploy our application
+        - to disable: fetch('', {cache: 'no-store'})
+        - or time based revalidation: fetch('', {next: { revalidate: 60}})
+        - it doesn't apply for other than fetch api like axios
+    
+    - Full Route Cache(Cache on the Server)
+      - Used to store the output of statically rendered routes
+      - in nextJs the path which doesnt have params considered as static route
+      - to disable: export const dynamic = 'force-dynamic'
+      - to disable: export const revalidate = 0; // revalidate every seconds
+      - ref: https://nextjs.org/docs/app/api-reference/file-conventions/route-segment-config
+    
+    - Router Cache(Client side cache)
+      - to store the payload of pages in browser
+      - lasts for a session
+      - Gets refreshed when we reload
+      - pages stored in client side get automatic revalidation: 
+        - 5 Mins for static routes
+        - 30 Seconds for dynamic routes
+      - to force revalidate: router.refresh();
