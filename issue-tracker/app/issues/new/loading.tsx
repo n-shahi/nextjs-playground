@@ -1,12 +1,12 @@
-import AppSkeleton from '@/app/components/Skeleton'
+import { Skeleton } from '@/app/components';
+import { Box } from '@radix-ui/themes';
 
 const IssueLoadingPage = () => {
   return (
-    <div className='max-w-3xl space-y-3'>
-      <AppSkeleton />
-      <AppSkeleton />
-      <AppSkeleton />
-    </div>
+    <Box className='max-w-3xl'>
+      <Skeleton />
+      <Skeleton height="20rem"/>
+    </Box>
   )
 }
 

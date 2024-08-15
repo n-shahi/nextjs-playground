@@ -490,4 +490,14 @@ export default Link
 ```
 - use above component for Next Link functionality with RadixUI Link looks
 
-### 
+### Disable Server Side Rendering
+- use dynamic import and desable ssr
+
+```tsx
+import dynamic from "next/dynamic";
+
+const SimpleMDE = dynamic(
+  () => import("react-simplemde-editor"), 
+  { ssr: false, loading: () => <Skeleton height="20rem"/> }
+)
+```

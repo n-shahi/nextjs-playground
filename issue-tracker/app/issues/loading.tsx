@@ -2,7 +2,7 @@ import { Button, Table } from '@radix-ui/themes'
 import Link from 'next/link'
 import React from 'react'
 import IssueActions from './_components/IssueActions'
-import AppSkeleton from '../components/Skeleton'
+import { Skeleton } from '@/app/components'
 
 const IssueLoadingPage = () => {
   const issues = [1, 2, 3, 4, 5, 6, 7]
@@ -23,16 +23,16 @@ const IssueLoadingPage = () => {
             <Table.Row key={issue}>
               <Table.Cell>
                 <Link href={`/issues/${issue}`}>
-                  <AppSkeleton />
+                  <Skeleton />
                   <div className='block md:hidden'>
-                  <AppSkeleton />
+                    <Skeleton />
                   </div>
                 </Link>
               </Table.Cell>
               <Table.Cell className='hidden md:table-cell'>
-              <AppSkeleton />
+                <Skeleton />
               </Table.Cell>
-              <Table.Cell className='hidden md:table-cell'><AppSkeleton /></Table.Cell>
+              <Table.Cell className='hidden md:table-cell'><Skeleton /></Table.Cell>
             </Table.Row>
           ))}
         </Table.Body>
