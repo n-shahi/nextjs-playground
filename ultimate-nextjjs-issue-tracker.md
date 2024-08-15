@@ -333,6 +333,106 @@ const IssuePage = async () => {
   )
 }
 export default IssuePage
-````
+```
 
-### 
+### Adding Loading Skeleton
+- install: npm i react-loading-skeleton
+- ref: https://www.npmjs.com/package/react-loading-skeleton
+```tsx
+// issues/loading.tsx
+import { Button, Table } from '@radix-ui/themes'
+import Link from 'next/link'
+import React from 'react'
+import IssueActions from './_components/IssueActions'
+import AppSkeleton from '../components/Skeleton'
+
+const IssueLoadingPage = () => {
+  const issues = [1, 2, 3, 4, 5, 6, 7]
+  return (
+    <div>
+      <IssueActions />
+      <Table.Root variant='surface'>
+        <Table.Header>
+          <Table.Row>
+            <Table.ColumnHeaderCell>Issue</Table.ColumnHeaderCell>
+            <Table.ColumnHeaderCell className='hidden md:table-cell'>Status</Table.ColumnHeaderCell>
+            <Table.ColumnHeaderCell className='hidden md:table-cell'>CreateAt</Table.ColumnHeaderCell>
+          </Table.Row>
+
+        </Table.Header>
+        <Table.Body>
+          {issues.map((issue) => (
+            <Table.Row key={issue}>
+              <Table.Cell>
+                <Link href={`/issues/${issue}`}>
+                  <AppSkeleton />
+                  <div className='block md:hidden'>
+                  <AppSkeleton />
+                  </div>
+                </Link>
+              </Table.Cell>
+              <Table.Cell className='hidden md:table-cell'>
+              <AppSkeleton />
+              </Table.Cell>
+              <Table.Cell className='hidden md:table-cell'><AppSkeleton /></Table.Cell>
+            </Table.Row>
+          ))}
+        </Table.Body>
+      </Table.Root>
+    </div>
+  )
+}
+export default IssueLoadingPage
+
+// components/AppSkeleton.tsx
+import Skeleton from 'react-loading-skeleton'
+import 'react-loading-skeleton/dist/skeleton.css'
+
+const AppSkeleton = () => {
+  return <Skeleton />
+}
+
+export default AppSkeleton
+```
+
+### Showing Issue Detail page
+- create page.tsx in app/issues/[id] 
+```tsx
+import prisma from '@/prisma/client'
+import { notFound } from 'next/navigation'
+import React from 'react'
+
+interface Props {
+  params: { id: string}
+}
+
+const IssueDetailPage = async ({ params: {id} }: Props ) => {
+  if (typeof parseInt(id) !== 'number') notFound() 
+  const issue = await prisma.issue.findUnique({
+    where: { id: parseInt(id) }
+  })
+  if (!issue) notFound();
+  return (
+    <div>
+      <p>{issue.id}</p>
+      <p>{issue.title}</p>
+      <p>{issue.status}</p>
+      <p>{issue.description}</p>
+    </div>
+  )
+}
+export default IssueDetailPage
+```
+- loading.tsx for user friendly interaction
+```tsx
+import React from 'react'
+
+const LoadingIssueDetailPage = () => {
+  return (
+    <div>
+      Loading...
+    </div>
+  )
+}
+export default LoadingIssueDetailPage
+```
