@@ -3,7 +3,7 @@ import './theme-config.css'
 import './globals.css'
 import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
-import { Theme } from '@radix-ui/themes';
+import { Container, Theme } from '@radix-ui/themes';
 import NavBar from './NavBar'
 
 const inter = Inter({
@@ -28,7 +28,9 @@ export default function RootLayout({
         <Theme appearance="light" accentColor='violet' className='px-5'>
           <NavBar />
           <main>
-            {children}
+            <Container>
+              {children}
+            </Container>
           </main>
         </Theme>
       </body>
