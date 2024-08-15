@@ -4,12 +4,11 @@ import React from 'react'
 
 const EditIssueButton = ({ issueId }: { issueId: number }) => {
     return (
-        <Button variant='outline'>
-            <Link href={`issues/${issueId}/edit`}>
-                <Pencil2Icon />
-                Edit Issue
-            </Link>
-        </Button>
+        <Link href={`/issues/${issueId}/edit`}>
+            <Button variant='outline' size="2">
+                <Pencil2Icon />Edit Issue
+            </Button>
+        </Link>
     )
 }
 

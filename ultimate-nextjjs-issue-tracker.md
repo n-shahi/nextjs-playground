@@ -531,4 +531,8 @@ export default IssueDetailPage
 
 ### Applying the Single Responsibiliy Pricinple
 - Software entities should have a single responsibility
-- 
+- split up components to make it modular 
+- put path related components into _component folder which does not include in paths even though we put page.tsx
+
+### Building the Edit Page
+- reuse IssueForm and add functionality to take issue to pre-populate value if issue is passed
