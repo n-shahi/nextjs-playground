@@ -501,3 +501,34 @@ const SimpleMDE = dynamic(
   { ssr: false, loading: () => <Skeleton height="20rem"/> }
 )
 ```
+
+
+## Updating issue
+### Adding Edit button 
+```tsx
+import { Pencil2Icon, Cross1Icon } from '@radix-ui/react-icons'
+...
+  return (
+    <Grid columns={{ initial: "1", md: "2" }} gap='3'>
+      ...
+      <Box className='space-x-3'>
+        <Link href={`issues/${issue.id}/edit`}>
+          <Button variant='outline'>
+            <Pencil2Icon />
+            Edit Issue
+          </Button>
+        </Link>
+        <Button variant='outline' color='red'>
+          <Cross1Icon />
+          Delete Issue
+        </Button>
+      </Box>
+    </Grid>
+  )
+}
+export default IssueDetailPage
+```
+
+### Applying the Single Responsibiliy Pricinple
+- Software entities should have a single responsibility
+- 
