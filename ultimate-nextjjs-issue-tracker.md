@@ -444,3 +444,23 @@ const LoadingIssueDetailPage = () => {
 }
 export default LoadingIssueDetailPage
 ```
+
+### Adding Markdown Preview
+- install: npm i react-markdown
+- by default heading and list unstyled, for this need to install plugins called Typography
+- ref: https://github.com/tailwindlabs/tailwindcss-typography
+- install: npm install -D @tailwindcss/typography
+- Then add the plugin to your tailwind.config.js file:
+```js
+/** @type {import('tailwindcss').Config} */
+module.exports = {
+  theme: {
+    // ...
+  },
+  plugins: [
+    require('@tailwindcss/typography'),
+    // ...
+  ],
+}
+```
+- and, add prose class to your component
