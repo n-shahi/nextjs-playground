@@ -3,19 +3,15 @@ import { Button, TextField } from '@radix-ui/themes';
 import "easymde/dist/easymde.min.css";
 import { Controller, useForm } from 'react-hook-form';
 
-import { ErrorMessage, Skeleton, Spinner } from '@/app/components';
+import { ErrorMessage, Spinner } from '@/app/components';
 import { issueSchema } from '@/app/validation_schema';
 import { zodResolver } from '@hookform/resolvers/zod';
 import axios from 'axios';
-import dynamic from "next/dynamic";
 import { useRouter } from 'next/navigation';
 import { z } from 'zod';
 import { Issue } from '@prisma/client';
+import SimpleMDE from 'react-simplemde-editor';
 
-const SimpleMDE = dynamic(
-  () => import("react-simplemde-editor"),
-  { ssr: false, loading: () => <Skeleton height="20rem" /> }
-)
 type IssueForm = z.infer<typeof issueSchema>;
 
 const IssueForm = ({ issue }: { issue?: Issue }) => {
