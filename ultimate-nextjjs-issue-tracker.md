@@ -619,3 +619,21 @@ try {
 ## Authentication
 ### Setting Up NextAuth
 - goto part1: ## Authentication with Next Auth
+
+### Fox for 403 for image 
+- add referrerPolicy='no-referer' in Avatar
+- else: update next.config.js>nextConfig object
+```tsx
+const nextConfig = {
+    async headers() {
+        return [
+            {
+                source: '/:path*', // all endpoint of app
+                headers: [
+                    { key: 'referrer-policy', value: 'no-referrer' },
+                ],
+            },
+        ]
+    }
+}
+```
