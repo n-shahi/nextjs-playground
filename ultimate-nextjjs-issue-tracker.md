@@ -637,3 +637,49 @@ const nextConfig = {
     }
 }
 ```
+
+### Securing the Application
+- prevent annoneous users to prevent to create, delete issues
+- middleware: a function that get executed for every request
+  - if not authenticated redirect the user to login page
+- create middleware.ts in root folder
+```tsx
+export { default } from 'next-auth/middleware';
+
+export const config = {
+  matcher: [
+    "/issues/new",
+    "/issues/edit/:id+",
+  ]
+}
+```
+- hide actions belong to users like edit or delete buttons
+```tsx
+...
+  const session = await getServerSession(authOptions)
+  return (
+    <Grid columns={{ initial: "1", sm: "5" }} gap='3'>
+      <Box className='md:col-span-4 md:'>
+        <IssueDetails issue={issue} />
+      </Box>
+
+      {session && <Box>
+        <Flex direction='column' gap='2'>
+          <EditIssueButton issueId={issue.id} />
+          <DeleteIssueButton issueId={issue.id} />
+        </Flex>
+      </Box>}
+    </Grid>
+  )
+}
+export default IssueDetailPage
+```
+- protect api endpoint by adding check like below
+```tsx
+import { authOptions } from "@/app/utils/authOptions";
+import { getServerSession } from "next-auth";
+
+const session = await getServerSession(authOptions)
+if (!session)
+    return NextResponse.json({ error: 'Unauthenticated' }, { status: 401 })
+```

@@ -4,6 +4,8 @@ import { notFound } from 'next/navigation'
 import EditIssueButton from '../EditIssueButton'
 import DeleteIssueButton from '../DeleteIssueButton'
 import IssueDetails from '../IssueDetails'
+import { getServerSession } from 'next-auth'
+import { authOptions } from '@/app/utils/authOptions'
 
 interface Props {
   params: { id: string }
@@ -15,17 +17,19 @@ const IssueDetailPage = async ({ params: { id } }: Props) => {
     where: { id: parseInt(id) }
   })
   if (!issue) notFound();
+  const session = await getServerSession(authOptions)
   return (
     <Grid columns={{ initial: "1", sm: "5" }} gap='3'>
       <Box className='md:col-span-4 md:'>
         <IssueDetails issue={issue} />
       </Box>
-      <Box>
+
+      {session && <Box>
         <Flex direction='column' gap='2'>
           <EditIssueButton issueId={issue.id} />
           <DeleteIssueButton issueId={issue.id} />
         </Flex>
-      </Box>
+      </Box>}
     </Grid>
   )
 }
