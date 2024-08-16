@@ -6,7 +6,7 @@ import { FaBug } from "react-icons/fa";
 import classnames from 'classnames';
 import { useSession } from 'next-auth/react';
 import { Avatar, Box, DropdownMenu, Flex, Text } from '@radix-ui/themes';
-
+import { Skeleton } from '@/app/components';
 
 const NavBar = () => {
   return (
@@ -48,7 +48,7 @@ const NavLink = () => {
 
 const AuthStatus = () => {
   const { status, data: session } = useSession()
-  if (status === 'loading') return <div>Loading...</div>
+  if (status === 'loading') return <Skeleton width='4rem' height='1.5rem'/>
   if (status === 'unauthenticated') return <Link href="/api/auth/signin" className='m-5 nav-link'>Sign In</Link>
   return (
     <Box>
