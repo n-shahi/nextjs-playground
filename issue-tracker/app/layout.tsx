@@ -26,16 +26,16 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={inter.variable}>
-        <Theme appearance="light" accentColor='violet' className='px-5'>
-          <AuthProvider>
-            <NavBar />
-            <main>
-              <Container>
+        <AuthProvider>
+          <Theme appearance="light" accentColor='violet' className='px-5'>
+            <Container>
+              <NavBar />
+              <main>
                 {children}
-              </Container>
-            </main>
-          </AuthProvider>
-        </Theme>
+              </main>
+            </Container>
+          </Theme>
+        </AuthProvider>
       </body>
     </html >
   )

@@ -25,7 +25,7 @@ const NavLink = () => {
     { name: 'Dashboard', href: '/dashboard' },
   ]
   return (
-    <Flex align='center' gap='2'>
+    <Flex align='center' gap='4'>
         <Link href='/'><FaBug /></Link>
         <ul>
           <li className='flex space-x-6'>
