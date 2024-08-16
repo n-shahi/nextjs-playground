@@ -1008,7 +1008,9 @@ options={{
 ### Setting Up Next Auth and Configuring Google Provider
 - install: npm i next-auth
 - ref: https://next-auth.js.org/getting-started/example
+- generate secret token using openssl: openssl rand -base64 32
 - create app in google console and get GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET and put in .env
+- add NEXTAUTH_URL, NEXTAUTH_SECRET, GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET to .env
 ```ts
 // api/auth/[...nextauth]/route.ts
 import NextAuth from "next-auth"
@@ -1158,11 +1160,17 @@ export const config = {
 - select relevent adapter: for our case prisma
 - ref: https://authjs.dev/getting-started/adapters/prisma
 - follow ref page to add adapter in authOptions
+  - npm install @prisma/client @next-auth/prisma-adapter@1.0.7
+  - npm install prisma --save-dev
+  - update route.tsx: follow below "Configuring CredentialsProvider"
+  - copy models to prisma schema
+  - migrate models: npx prisma migrate dev
+  - for login: http://localhost:3000/api/auth/signin
+  - for logout: http://localhost:3000/api/auth/logout
 - add session in authOptions if required(database does not support)
 ```tsx
 session: { strategy: 'jwt'}
 ```
-
 
 ### Configuring CredentialsProvider
 - enable login with username and password

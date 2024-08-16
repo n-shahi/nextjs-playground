@@ -611,3 +611,11 @@ try {
         - 5 Mins for static routes
         - 30 Seconds for dynamic routes
       - to force revalidate: router.refresh();
+  
+### Removing Duplicate Skeleton
+- remove nested path to avoid skeleton collisions
+
+
+## Authentication
+### Setting Up NextAuth
+- goto part1: ## Authentication with Next Auth
