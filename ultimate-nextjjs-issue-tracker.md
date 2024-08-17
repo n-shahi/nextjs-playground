@@ -762,3 +762,64 @@ const QueryClientProvider = ({ children }: PropsWithChildren) => {
 }
 export default QueryClientProvider
 ```
+
+### Fetch Data Using React Query
+```tsx
+"use client"
+...
+const { data: users, error, isLoading } = useQuery<User[]>({
+    queryKey: ['users'],
+    queryFn: async () => axios.get('/api/users').then(res => res.data),
+    staleTime: 1000 * 60 * 1, // 1 minutes // default 0
+    retry: 3 
+});
+if (isLoading) return <Skeleton />
+if (error) return null;
+...
+```
+### Update Issue PATCH API to handle assignToUserId
+- issues/[id]/route.tsx
+```tsx
+export async function PATCH(request: NextRequest, {params: {id}}: { params: {id: string}}) {
+    const session = await getServerSession(authOptions)
+    if (!session)
+        return NextResponse.json({ error: 'Unauthenticated' }, { status: 401 })
+
+    const data = await request.json();
+
+    const validation = patchIssueSchema.safeParse(data)
+    if (!validation.success)
+        return NextResponse.json({ error: validation.error.format() }, { status: 400 })
+    
+    const { assignToUserId, title, description } = data;
+    if (assignToUserId) {
+        const assignUser = await prisma.user.findUnique({where: { id: assignToUserId }})
+        if (!assignUser) return NextResponse.json({ error: 'Invalid user' }, { status: 404 })
+    }
+
+    const issue = await prisma.issue.findUnique({
+        where: { id: parseInt(id) },
+    })
+    if (!issue)
+        return NextResponse.json({ error: 'Issue not found' }, { status: 404 })
+    const updatedIssue = await prisma.issue.update({
+        where: { id: parseInt(id) },
+        data: {
+            title: title || issue.title,
+            description: description || issue.description,
+            assignToUserId: assignToUserId || issue.assignToUserId,
+        }
+    })
+    return NextResponse.json(updatedIssue, { status: 200 })
+}
+```
+
+- Also create separate schema for patch
+```ts
+})
+export const patchIssueSchema = z.object({
+    title: z.string().min(1, 'Title is required.').max(255, "Title can't be more than 255 characters").optional(),
+    description: z.string().min(1, 'Description is required.').max(65535).optional(),
+    assignedToUserId: z.string().min(1, 'AssignedToUserId is required').max(255).optional().nullable(),
+})
+```

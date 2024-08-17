@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import prisma from "@/prisma/client";
-import { issueSchema } from "@/app/validation_schema";
+import { patchIssueSchema } from "@/app/validation_schema";
 import { authOptions } from "@/app/utils/authOptions";
 import { getServerSession } from "next-auth";
 
@@ -9,11 +9,18 @@ export async function PATCH(request: NextRequest, {params: {id}}: { params: {id:
     const session = await getServerSession(authOptions)
     if (!session)
         return NextResponse.json({ error: 'Unauthenticated' }, { status: 401 })
+
     const data = await request.json();
 
-    const validation = issueSchema.safeParse(data)
+    const validation = patchIssueSchema.safeParse(data)
     if (!validation.success)
         return NextResponse.json({ error: validation.error.format() }, { status: 400 })
+    
+    const { assignToUserId, title, description } = data;
+    if (assignToUserId) {
+        const assignUser = await prisma.user.findUnique({where: { id: assignToUserId }})
+        if (!assignUser) return NextResponse.json({ error: 'Invalid user' }, { status: 404 })
+    }
 
     const issue = await prisma.issue.findUnique({
         where: { id: parseInt(id) },
@@ -23,8 +30,9 @@ export async function PATCH(request: NextRequest, {params: {id}}: { params: {id:
     const updatedIssue = await prisma.issue.update({
         where: { id: parseInt(id) },
         data: {
-            title: data.title || issue.title,
-            description: data.description || issue.description,
+            title: title || issue.title,
+            description: description || issue.description,
+            assignToUserId: assignToUserId || issue.assignToUserId,
         }
     })
     return NextResponse.json(updatedIssue, { status: 200 })
