@@ -823,3 +823,7 @@ export const patchIssueSchema = z.object({
     assignedToUserId: z.string().min(1, 'AssignedToUserId is required').max(255).optional().nullable(),
 })
 ```
+
+### Showing Toast Notifications
+- npm install react-hot-toast
+- ref: https://www.npmjs.com/package/react-hot-toast
