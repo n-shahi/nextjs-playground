@@ -683,3 +683,82 @@ const session = await getServerSession(authOptions)
 if (!session)
     return NextResponse.json({ error: 'Unauthenticated' }, { status: 401 })
 ```
+
+
+## Assigning Issues to Users
+### Building the Assignee Select Component
+- use Select component from radix UI to create issues/_component/AssignIssue.tsx and use in issues page
+- ref: https://www.radix-ui.com/themes/docs/components/select
+- fetch user directly from client component(above: it's client component as it needs user interaction)
+```tsx
+"use client"
+import { User } from '@prisma/client'
+import { Select } from '@radix-ui/themes'
+import axios from 'axios'
+import React, { useEffect, useState } from 'react'
+
+const AssignIssue = () => {
+    const [ users, setUsers ] = useState<User[]>([])
+    useEffect(() => {
+        const fetchUsers = async () => {
+            const { data } = await axios.get('/api/users/')
+            setUsers(data)
+        }
+        fetchUsers()
+    }, [])
+    return (
+        <Select.Root>
+            <Select.Trigger placeholder='Assign to...'/>
+            <Select.Content>
+                <Select.Group>
+                    <Select.Label>Suggestions</Select.Label>
+                    { users.map((user) => (
+                         <Select.Item key={user.id} value={user.id}>{user.email}</Select.Item>
+                    ))}
+                </Select.Group>
+            </Select.Content>
+        </Select.Root>
+    )
+}
+export default AssignIssue
+
+```
+
+- add GET users api to api/users/route.ts
+- include request: NextRequest to avoid caching
+```ts
+import prisma from "@/prisma/client";
+import { NextRequest, NextResponse } from "next/server";
+
+export async function GET(request: NextRequest) {
+    const users = await prisma.user.findMany(
+        { orderBy: { name: 'asc'}}
+    )
+    return NextResponse.json(users, { status: 200});
+}
+```
+
+### Setting Up React Query
+- we can simply use fetch or axios to fetch data from api
+- but as need to hanlde error, retry and caching(no need to fetch data based on issue like users) is required
+- to handle all above issue we can use TanStack Query instead
+  
+- npm i @tanstack/react-query@4.35.3
+- create app/QueryClientProvider.tsx so that we can wrap all body elements with it and share QueryClient across component tree. 
+- react context is only available in client side to add "use client"
+```tsx
+"use client"
+import React, { PropsWithChildren } from 'react'
+import { QueryClient, QueryClientProvider as ReactQueryClientProvider } from '@tanstack/react-query';
+
+const queryClient = new QueryClient();
+
+const QueryClientProvider = ({ children }: PropsWithChildren) => {
+  return (
+    <ReactQueryClientProvider client={queryClient}>
+        {children}
+    </ReactQueryClientProvider>
+  )
+}
+export default QueryClientProvider
+```
