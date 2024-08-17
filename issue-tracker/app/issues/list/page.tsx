@@ -1,26 +1,38 @@
 import prisma from '@/prisma/client'
-import { Box, Grid, Table } from '@radix-ui/themes'
+import { Box, Table } from '@radix-ui/themes'
 import IssueActions from '../_components/IssueActions'
-import { Link, IssueStatusBadge } from '@/app/components'
-import { Status } from '@prisma/client';
+import { IssueStatusBadge } from '@/app/components'
+import Link from 'next/link'
+import { Issue, Status } from '@prisma/client';
+import { ArrowUpIcon } from '@radix-ui/react-icons'
 
 interface Props {
-  searchParams: { status: Status};
+  searchParams: { status: Status, orderBy: string};
 }
 
 const IssuePage = async ({ searchParams }: Props) => {
   const statuses = Object.values(Status)
   const status = statuses.includes(searchParams.status) ? searchParams.status : undefined
-  const issues = await prisma.issue.findMany({where: {status}})
+  const issues = await prisma.issue.findMany({ where: { status } })
+  const columns: { label: string; value: keyof Issue; className: string }[] = [
+    { label: 'Issue', value: 'title', className: '' },
+    { label: 'Status', value: 'status', className: 'hidden md:table-cell' },
+    { label: 'Create At', value: 'createdAt', className: 'hidden md:table-cell' },
+  ]
   return (
     <Box>
       <IssueActions />
       <Table.Root variant='surface'>
         <Table.Header>
           <Table.Row>
-            <Table.ColumnHeaderCell>Issue</Table.ColumnHeaderCell>
-            <Table.ColumnHeaderCell className='hidden md:table-cell'>Status</Table.ColumnHeaderCell>
-            <Table.ColumnHeaderCell className='hidden md:table-cell'>CreateAt</Table.ColumnHeaderCell>
+            {columns.map((column) => (
+              <Table.ColumnHeaderCell key={column.value} className={column.className}>
+                <Link href={{
+                  query: {...searchParams, orderBy: column.value}
+                }}>{column.label}</Link>
+                { column.value === searchParams.orderBy && <ArrowUpIcon className='inline'/>}
+              </Table.ColumnHeaderCell>
+            ))}
           </Table.Row>
 
         </Table.Header>
@@ -31,7 +43,7 @@ const IssuePage = async ({ searchParams }: Props) => {
                 <Link href={`/issues/${issue.id}`}>
                   {issue.title}
                   <div className='block md:hidden'>
-                  <IssueStatusBadge status={issue.status} />
+                    <IssueStatusBadge status={issue.status} />
                   </div>
                 </Link>
               </Table.Cell>
