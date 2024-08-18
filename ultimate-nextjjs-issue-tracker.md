@@ -1004,3 +1004,17 @@ export const metadata: Metadata = {
   description: 'View All Project Issue'
 }
 ```
+
+### Optimizing Performance using React Cache
+- use cache from reach to cache result and use it in many places
+```tsx
+const fetchIssue = cache((issueId: number) => prisma.issue.findUnique({ where: { id: issueId } }))
+```
+- add config object like below to see each query made 
+```tsx
+const prismaClientSingleton = () => {
+  return new PrismaClient({
+    log: ['query']
+  })
+}
+```
