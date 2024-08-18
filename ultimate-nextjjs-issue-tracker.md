@@ -960,3 +960,47 @@ export default IssuePage
 ## Dashboard
 - build component LatestIssues.tsx, IssuesSummary.tsx, SummaryChart.tsx
 - use recharts for chart
+
+
+## Going to Production
+### Adding Metadata
+- add metadata with openGraph 
+```tsx
+export const metadata: Metadata = {
+  title: 'Issue Tracker - Dashboard',
+  description: 'A simple issue tracker application built with Next.js and Prisma.',
+  openGraph: {
+    type: 'website',
+    url: 'https://example.com',
+    title: 'Issue Tracker',
+    description: 'A simple issue tracker application built with Next.js and Prisma.',
+    images: [
+      {
+        url: 'https://example.com/og-image.jpg',
+        width: 800,
+        height: 600,
+      },
+    ],
+  },
+}
+```
+- Add metadata dynamically
+```tsx
+  export async function generateMetadata({ params }: Props) {
+  const issue = await prisma.issue.findUnique({
+    where: { id: parseInt(params.id) },
+  })
+  return {
+    title: `Issue: ${issue!.id} - ${issue!.title}`,
+    description: `Description of the issue: ${issue!.title}`,
+  }
+}
+```
+
+- simple metadata
+```tsx
+export const metadata: Metadata = {
+  title: 'Issue Tracker - Issue List',
+  description: 'View All Project Issue'
+}
+```
