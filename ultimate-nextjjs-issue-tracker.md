@@ -953,5 +953,10 @@ const IssuePage = async ({ searchParams }: Props) => {
 export const dynamic = 'force-dynamic'
 export default IssuePage
 ```
+### Pagination
+- build pagination component and set query parameters based on click events
+- and fetch data according to the query parameters
 
-### 
+## Dashboard
+- build component LatestIssues.tsx, IssuesSummary.tsx, SummaryChart.tsx
+- use recharts for chart

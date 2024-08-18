@@ -21,8 +21,8 @@ const NavLink = () => {
   const currentPath = usePathname()
 
   const navList = [
+    { name: 'Dashboard', href: '/' },
     { name: 'Issues', href: '/issues/list' },
-    { name: 'Dashboard', href: '/dashboard' },
   ]
   return (
     <Flex align='center' gap='4'>
