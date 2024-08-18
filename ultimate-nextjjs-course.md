@@ -550,7 +550,7 @@ if (id > 10) {
   }
 ```
 
-### Handling Unexpected Errors
+### Handling Unexpected Errors:
 - create error.tsx special file to show page if any error occurs
 - can custom error page in multiple level like not found page
 - But, error.tsx in app folder doesnt capture error in main layout.tsx

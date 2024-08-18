@@ -1025,3 +1025,14 @@ const prismaClientSingleton = () => {
 - ref: https://github.com/newren/git-filter-repo
 - download git-filter-repo and change extension to .py and run below command
 - python3 git-filter-repo --path .env --invert-paths --force
+
+### Setting Up Error Tracking
+- Sentry
+- BugSnag
+- LockRocket
+
+- create account at sentry.io and create project
+- run: npx @sentry/wizard@latest -i nextjs
+
+### Setting Up the Production Database
+- 
