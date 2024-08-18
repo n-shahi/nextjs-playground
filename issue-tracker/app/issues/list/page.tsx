@@ -5,24 +5,38 @@ import { IssueStatusBadge } from '@/app/components'
 import Link from 'next/link'
 import { Issue, Status } from '@prisma/client';
 import { ArrowUpIcon } from '@radix-ui/react-icons'
+import Pagination from '@/app/components/Pagination'
 
 interface Props {
-  searchParams: { status: Status, orderBy: 'title' | 'status' | 'createdAt'};
+  searchParams: {
+    status: Status,
+    orderBy: keyof Issue,
+    page: string
+  }
 }
 
 const IssuePage = async ({ searchParams }: Props) => {
+  const page = parseInt(searchParams.page) || 1
+  const pageSize = 10
+
   const statuses = Object.values(Status)
   const status = statuses.includes(searchParams.status) ? searchParams.status : undefined
+  const where = { status }
+
   const columns: { label: string; value: keyof Issue; className: string }[] = [
     { label: 'Issue', value: 'title', className: '' },
     { label: 'Status', value: 'status', className: 'hidden md:table-cell' },
     { label: 'Create At', value: 'createdAt', className: 'hidden md:table-cell' },
   ]
   const orderBy = columns.map(column => column.value).includes(searchParams.orderBy) ? { [searchParams.orderBy]: 'asc' } : undefined
+
   const issues = await prisma.issue.findMany({ 
-    where: { status },
-    orderBy: orderBy
+    where,
+    orderBy: orderBy,
+    take: pageSize,
+    skip: (page - 1) * pageSize,
   })
+  const totalIssue = await prisma.issue.count({where});
 
   return (
     <Box>
@@ -61,12 +75,13 @@ const IssuePage = async ({ searchParams }: Props) => {
         </Table.Body>
       </Table.Root>
       <Box>
-        <p>Total Issues: {issues.length}</p>
+        <p>Total Issues: {totalIssue}</p>
       </Box>
+      
+      <Pagination itemCount={totalIssue} pageSize={pageSize} currentPage={page} />
     </Box>
   )
 }
-
 export const dynamic = 'force-dynamic'
 
 export default IssuePage
