@@ -1018,3 +1018,10 @@ const prismaClientSingleton = () => {
   })
 }
 ```
+
+### Remove/Include .env variables
+- add .env.example for refrence in the repo without sensetive info but not the real one. 
+- if any sensitive files commited, remove using git-filter-repo
+- ref: https://github.com/newren/git-filter-repo
+- download git-filter-repo and change extension to .py and run below command
+- python3 git-filter-repo --path .env --invert-paths --force
