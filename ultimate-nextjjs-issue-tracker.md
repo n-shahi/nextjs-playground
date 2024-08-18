@@ -827,3 +827,131 @@ export const patchIssueSchema = z.object({
 ### Showing Toast Notifications
 - npm install react-hot-toast
 - ref: https://www.npmjs.com/package/react-hot-toast
+
+
+## Filtering, Sorting and Pagination
+### Filtering and Sorting
+- update url query in componets and get those in list page and use it to fetch data using prisma
+```tsx
+/// issue-tracker/app/issues/_components/IssueStatusFilter.tsx
+'use client'
+import { Status } from '@prisma/client';
+import { Select } from '@radix-ui/themes';
+import { useRouter, useSearchParams } from 'next/navigation';
+import router from 'next/router';
+import React from 'react'
+
+const statuses: { label: string, value?: Status }[] = [
+    { label: "All" },
+    { label: "New", value: Status.NEW },
+    { label: "Open", value: Status.OPEN },
+    { label: "In Progress", value: Status.IN_PROGRESS },
+    { label: "Closed", value: Status.CLOSED },
+  ]
+
+const IssueStatusFilter = () => {
+  const router = useRouter()
+  const searchParams = useSearchParams()
+  return (
+    <Select.Root 
+      defaultValue={searchParams.get("status") || "all"} 
+      onValueChange={(status) => {
+        if (status === 'all') status = ''
+
+        const params = new URLSearchParams()
+        if (status) params.set('status', status)
+        if (searchParams.get('orderBy'))
+          params.set('orderBy', searchParams.get('orderBy')!)
+        
+        const query = params? `?${params.toString()}` : ''
+        router.push(`/issues/list${query}`)
+      }}>
+        <Select.Trigger placeholder="Filter by status"/>
+
+        <Select.Content>
+          {statuses.map(stat => (
+            <Select.Item key={stat.value} value={stat.value || 'all'}>
+              {stat.label}
+            </Select.Item>
+          ))}
+        </Select.Content>
+      </Select.Root>
+  )
+}
+export default IssueStatusFilter
+
+
+// issue-tracker/app/issues/list/page.tsx
+import prisma from '@/prisma/client'
+import { Box, Table } from '@radix-ui/themes'
+import IssueActions from '../_components/IssueActions'
+import { IssueStatusBadge } from '@/app/components'
+import Link from 'next/link'
+import { Issue, Status } from '@prisma/client';
+import { ArrowUpIcon } from '@radix-ui/react-icons'
+
+interface Props {
+  searchParams: { status: Status, orderBy: 'title' | 'status' | 'createdAt'};
+}
+
+const IssuePage = async ({ searchParams }: Props) => {
+  const statuses = Object.values(Status)
+  const status = statuses.includes(searchParams.status) ? searchParams.status : undefined
+  const columns: { label: string; value: keyof Issue; className: string }[] = [
+    { label: 'Issue', value: 'title', className: '' },
+    { label: 'Status', value: 'status', className: 'hidden md:table-cell' },
+    { label: 'Create At', value: 'createdAt', className: 'hidden md:table-cell' },
+  ]
+  const orderBy = columns.map(column => column.value).includes(searchParams.orderBy) ? { [searchParams.orderBy]: 'asc' } : undefined
+  const issues = await prisma.issue.findMany({ 
+    where: { status },
+    orderBy: orderBy
+  })
+
+  return (
+    <Box>
+      <IssueActions />
+      <Table.Root variant='surface'>
+        <Table.Header>
+          <Table.Row>
+            {columns.map((column) => (
+              <Table.ColumnHeaderCell key={column.value} className={column.className}>
+                <Link href={{
+                  query: {...searchParams, orderBy: column.value}
+                }}>{column.label}</Link>
+                { column.value === searchParams.orderBy && <ArrowUpIcon className='inline'/>}
+              </Table.ColumnHeaderCell>
+            ))}
+          </Table.Row>
+
+        </Table.Header>
+        <Table.Body>
+          {issues.map((issue) => (
+            <Table.Row key={issue.id}>
+              <Table.Cell>
+                <Link href={`/issues/${issue.id}`}>
+                  {issue.title}
+                  <div className='block md:hidden'>
+                    <IssueStatusBadge status={issue.status} />
+                  </div>
+                </Link>
+              </Table.Cell>
+              <Table.Cell className='hidden md:table-cell'>
+                <IssueStatusBadge status={issue.status} />
+              </Table.Cell>
+              <Table.Cell className='hidden md:table-cell'>{new Date(issue.createdAt).toLocaleString()}</Table.Cell>
+            </Table.Row>
+          ))}
+        </Table.Body>
+      </Table.Root>
+      <Box>
+        <p>Total Issues: {issues.length}</p>
+      </Box>
+    </Box>
+  )
+}
+export const dynamic = 'force-dynamic'
+export default IssuePage
+```
+
+### 
